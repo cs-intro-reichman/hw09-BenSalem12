@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class LanguageModel {
@@ -33,7 +34,46 @@ public class LanguageModel {
 
     /** Builds a language model from the text in the given file (the corpus). */
 	public void train(String fileName) {
-		// Your code goes here
+		String window = "";
+        char c;
+                
+        In in = new In(fileName);
+        // Reads just enough characters to form the first window
+        for (int i = 0; i < 2; i++) {
+            c = in.readChar();
+            window = window + c;
+        }
+
+        // Processes the entire text, one character at a time
+        while (!in.isEmpty()) {
+            // Gets the next character
+            c = in.readChar();
+
+            // Checks if the window is already in the map
+
+            // If the window was not found in the map
+            // Creates a new empty list, and adds (window,list) to the map
+            if (CharDataMap.get(window) == null) {
+                List probs = new List();
+                CharDataMap.put(window, probs);
+            }
+
+            // Calculates the counts of the current character.
+            List probs = new List();
+            probs = CharDataMap.get(window);
+            probs.update(c);
+            CharDataMap.put(window, probs);
+
+            // Advances the window: adds c to the window’s end, and deletes the
+            // window's first character.
+            window = window.substring(1,2) + c;
+        }
+        // The entire file has been processed, and all the characters have been counted.
+        // Proceeds to compute and set the p and cp fields of all the CharData objects
+        // in each linked list in the map.
+        for (List probs : CharDataMap.values()){
+            calculateProbabilities(probs);
+        }
 	}
 
     // Computes and sets the probabilities (p and cp fields) of all the
@@ -101,6 +141,7 @@ public class LanguageModel {
 			str.append(key + " : " + keyProbs + "\n");
 		}
 		return str.toString();
+
 	}
 
     public static void main(String[] args) {
