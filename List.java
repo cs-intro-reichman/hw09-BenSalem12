@@ -78,6 +78,18 @@ public class List {
         }
 
         Node current = first;
+        while (current != null) {
+            if (current.cp.chr == chr){
+                current.cp.count ++;
+                break;
+            }
+            current = current.next;
+        }
+        if (current == null)  {
+            addFirst(chr);
+        }
+        
+        /* Node current = first;
         while (current.next != null) {
             if (current.cp.chr == chr){
                 current.cp.count ++;
@@ -91,7 +103,7 @@ public class List {
                 current.cp.count ++;
             else
                 addFirst(chr);
-        }
+        }*/
     }
 
     /** GIVE If the given character exists in one of the CharData objects
