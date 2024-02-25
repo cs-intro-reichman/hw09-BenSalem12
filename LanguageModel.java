@@ -39,7 +39,7 @@ public class LanguageModel {
                 
         In in = new In(fileName);
         // Reads just enough characters to form the first window
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < windowLength; i++) {
             c = in.readChar();
             window = window + c;
         }
@@ -66,7 +66,7 @@ public class LanguageModel {
 
             // Advances the window: adds c to the window’s end, and deletes the
             // window's first character.
-            window = window.substring(1,2) + c;
+            window = window.substring(1,windowLength) + c;
         }
         // The entire file has been processed, and all the characters have been counted.
         // Proceeds to compute and set the p and cp fields of all the CharData objects
@@ -108,7 +108,8 @@ public class LanguageModel {
         char chr = ' ';
         int size = probs.getSize();
 
-        double  d = randomGenerator.nextDouble(1);
+        double  d = randomGenerator.nextDouble();
+        //System.out.println("getRandomChar: random = " +d);
 
         for (int i = 0; i < size ; i++) {
             ListIterator iterator = probs.listIterator(i);
@@ -128,9 +129,30 @@ public class LanguageModel {
 	 * @return the generated text
 	 */
 	public String generate(String initialText, int textLength) {
-		// Your code goes here
-        String str = "";
-        return str;
+		String generatedText = initialText;
+        List probs = new List();
+        String currWindow = initialText;
+        char chr = ' ';
+
+        while (generatedText.length() < textLength) {
+            //System.out.println("generate: currWindow =" +currWindow);
+
+            probs = CharDataMap.get(currWindow);
+            //System.out.println("generate: probs = ");
+            //System.out.println(probs);
+
+            chr = getRandomChar(probs);
+            //System.out.println("generate: chr = " +chr);
+
+		    generatedText = generatedText + chr;
+           // System.out.println("generate: generatedText = " +generatedText);
+
+            // Advances the window: 
+            currWindow = currWindow.substring(1,windowLength) + chr;
+
+        }
+        return generatedText;
+
 	}
 
     /** Returns a string representing the map of this language model. */
