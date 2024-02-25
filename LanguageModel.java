@@ -134,7 +134,7 @@ public class LanguageModel {
         String currWindow = initialText;
         char chr = ' ';
 
-        while (generatedText.length() < textLength) {
+        while (generatedText.length() < textLength + initialText.length()) {
             //System.out.println("generate: currWindow =" +currWindow);
 
             probs = CharDataMap.get(currWindow);
