@@ -135,17 +135,12 @@ public class LanguageModel {
         char chr = ' ';
 
         while (generatedText.length() < textLength + initialText.length()) {
-            //System.out.println("generate: currWindow =" +currWindow);
 
             probs = CharDataMap.get(currWindow);
-            //System.out.println("generate: probs = ");
-            //System.out.println(probs);
 
             chr = getRandomChar(probs);
-            //System.out.println("generate: chr = " +chr);
 
 		    generatedText = generatedText + chr;
-           // System.out.println("generate: generatedText = " +generatedText);
 
             // Advances the window: 
             currWindow = currWindow.substring(1,windowLength) + chr;
